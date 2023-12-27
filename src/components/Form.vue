@@ -9,21 +9,10 @@
           <input class="form-control-sm" placeholder="Họ Tên" v-model="info.name" title="Họ Tên" />
         </div>
         <div class="col">
-          <input
-            class="form-control-sm"
-            type="number"
-            placeholder="Số ĐT"
-            v-model="info.phone"
-            title="Số điện thoại"
-          />
+          <input class="form-control-sm" type="number" placeholder="Số ĐT" v-model="info.phone" title="Số điện thoại" />
         </div>
       </div>
-      <input
-        class="form-control-sm"
-        placeholder="Địa chỉ chi tiết"
-        v-model="street"
-        title="Địa chỉ chi tiết"
-      />
+      <input class="form-control-sm" placeholder="Địa chỉ chi tiết" v-model="street" title="Địa chỉ chi tiết" />
       <div class="form-row">
         <div class="col">
           <select v-model="country" class="form-control-sm">
@@ -32,64 +21,32 @@
           </select>
         </div>
         <div class="col">
-          <Autocomplete
-            :list_data_input="list_city"
-            :placeholder="'Tỉnh/Tp'"
-            @data_output="city=$event"
-            :getData="getDistrict"
-            :prop_name="'name'"
-            :clearInput="resetChangeCity"
-          />
+          <Autocomplete :list_data_input="list_city" :placeholder="'Tỉnh/Tp'" @data_output="city = $event"
+            :getData="getDistrict" :prop_name="'name'" :clearInput="resetChangeCity" />
         </div>
       </div>
       <div class="form-row">
         <div class="col">
-          <Autocomplete
-            :list_data_input="list_district"
-            :placeholder="'Quận/Huyện'"
-            @data_output="district=$event"
-            :getData="getWard"
-            :prop_name="'name'"
-            :clearInput="resetChangeDistrict"
-            :watch_data="district"
-          />
+          <Autocomplete :list_data_input="list_district" :placeholder="'Quận/Huyện'" @data_output="district = $event"
+            :getData="getWard" :prop_name="'name'" :clearInput="resetChangeDistrict" :watch_data="district" />
         </div>
         <div class="col">
-          <Autocomplete
-            :list_data_input="list_ward"
-            :placeholder="'Phường/Xã'"
-            @data_output="ward=$event"
-            :getData="false"
-            :prop_name="'name'"
-            :clearInput="false"
-            :watch_data="ward"
-          />
+          <Autocomplete :list_data_input="list_ward" :placeholder="'Phường/Xã'" @data_output="ward = $event"
+            :getData="false" :prop_name="'name'" :clearInput="false" :watch_data="ward" />
         </div>
       </div>
     </div>
     <div class="customer__product">
       <hr />
       <p class="all__text--decoration mb-0">Sản phẩm</p>
-      <textarea
-        class="form-control-sm"
-        placeholder="Sản Phẩm"
-        v-model="info.product"
-        title="Sản Phẩm"
-      ></textarea>
+      <textarea class="form-control-sm" placeholder="Sản Phẩm" v-model="info.product" title="Sản Phẩm"></textarea>
     </div>
     <div class="customer__price">
       <hr />
       <p class="all__text--decoration mb-0">Giá Trị Đơn Hàng</p>
-      <input
-        id="input"
-        class="form-control-sm text-right"
-        type="text"
-        placeholder="Giá Trị Đơn Hàng"
-        title="Giá Trị Đơn Hàng"
-        v-model="info.total_price"
-        data-type="currency"
-        @keyup="checkKeyBoard($event,$event.target.value)"
-      />
+      <input id="input" class="form-control-sm text-right" type="text" placeholder="Giá Trị Đơn Hàng"
+        title="Giá Trị Đơn Hàng" v-model="info.total_price" data-type="currency"
+        @keyup="checkKeyBoard($event, $event.target.value)" />
     </div>
 
     <div class="customer__note mb-3 d-flex justify-content-end">
@@ -99,22 +56,14 @@
       </div>
     </div>
     <div v-if="is_show_note">
-      <textarea
-        class="input input-large note form-control-sm mb-2"
-        placeholder="Ghi Chú"
-        title="Ghi chú"
-        v-model="info.note"
-      ></textarea>
+      <textarea class="input input-large note form-control-sm mb-2" placeholder="Ghi Chú" title="Ghi chú"
+        v-model="info.note"></textarea>
     </div>
     <div class="text-right mb-2">
       <button class="btn-pill w-100 my-2" @click="handleShowOrderInfo()">Tạo đơn hàng</button>
     </div>
-    <OrderInfo
-      :is_show_order_info="is_show_order_info"
-      :handleCloseOrderInfo="handleCloseOrderInfo"
-      :createOrder="createOrder"
-      :info="info"
-    />
+    <OrderInfo :is_show_order_info="is_show_order_info" :handleCloseOrderInfo="handleCloseOrderInfo"
+      :createOrder="createOrder" :info="info" />
   </div>
 </template>
 
@@ -169,7 +118,22 @@ export default {
       this.hide_url_ggform = true;
     }
   },
-
+  watch: {
+    payload: {
+      handler(value, oldValue) {
+        const _this = this
+        console.log(_this.info)
+        setTimeout(function () {
+          console.log("value", JSON.stringify(value))
+          if (value.to_name || value.to_phone) {
+            _this.info.name = value.to_name
+            _this.info.phone = value.to_phone
+          }
+        }, 500)
+      },
+      deep: true
+    }
+  },
   methods: {
     async createOrder() {
       if (this.handle_api) return;
@@ -365,7 +329,6 @@ export default {
       });
     },
   },
-
   filters: {
     toCurrency(value) {
       // console.log('type num',typeof value);
@@ -385,6 +348,7 @@ export default {
   padding: 10px;
   line-height: 1.5rem;
   box-sizing: border-box;
+
   // ::-webkit-scrollbar {
   //   width: 0px;
   //   background-color: rgb(225, 225, 225);
@@ -395,14 +359,17 @@ export default {
     font-weight: bold;
     padding-bottom: 1rem;
   }
+
   .customer__info,
   .customer__product,
   .customer__price {
     position: relative;
     padding-bottom: 10px;
   }
+
   .customer__note {
     cursor: pointer;
+
     img {
       width: 20px;
       height: 20px;
@@ -413,10 +380,12 @@ export default {
 textarea {
   height: 40px;
 }
+
 input,
 select {
   margin-bottom: 10px;
 }
+
 button {
   font-weight: 600;
 }

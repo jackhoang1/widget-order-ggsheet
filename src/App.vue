@@ -115,6 +115,7 @@ export default {
         );
 
         console.log("get_customer_info", get_customer_info);
+        
         if (
           get_customer_info &&
           get_customer_info.data &&
@@ -284,7 +285,7 @@ export default {
                 _this.payload = {}
                 await _this.partnerAuth();
 
-                _this.reload = false
+                // _this.reload = false
 
                 this.setTimeout(function () {
                   _this.reload = true
